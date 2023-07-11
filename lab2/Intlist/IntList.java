@@ -85,8 +85,9 @@ public class IntList {
         if(A!=null){
             IntList p = new IntList(A.first,A.rest);
             while(p.rest!=null)p=p.rest;
-            p.rest = B;}//reassign p will never alter the value of A. Only when reassign the value of what p points to can do.
-        return A;
+            p.rest = B;
+            return A;}//reassign p will never alter the value of A. Only when reassign the value of what p points to can do.
+        else return B;
     }
 
     /**
