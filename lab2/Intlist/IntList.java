@@ -82,9 +82,10 @@ public class IntList {
 
     public static IntList dcatenate(IntList A, IntList B) {
         //TODO:  fill in method
-        IntList p = new IntList(A.first,A.rest);
-        while(p.rest!=null)p=p.rest;
-        p.rest = B;//reassign p will never alter the value of A. Only when reassign the value of what p points to can do.
+        if(A!=null){
+            IntList p = new IntList(A.first,A.rest);
+            while(p.rest!=null)p=p.rest;
+            p.rest = B;}//reassign p will never alter the value of A. Only when reassign the value of what p points to can do.
         return A;
     }
 
@@ -95,7 +96,9 @@ public class IntList {
     public static IntList catenate(IntList A, IntList B) {
         //TODO:  fill in method
         if(A==null){
-            return new IntList(B.first, B.rest);
+            if(B!=null)
+                return new IntList(B.first, B.rest);
+            else return null;
         }
         return new IntList(A.first,catenate(A.rest,B));
     }
