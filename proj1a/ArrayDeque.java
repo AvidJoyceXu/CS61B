@@ -46,12 +46,16 @@ public class ArrayDeque<T>{
         last = size;
         items = p;
     }
+    private int boundary_protector(int x){
+        while(x<0){
+            x += max_size;}
+        while(x>=max_size){
+            x -= max_size;}
+        return x;
+    }
     public void addFirst(T item){
         if(size<max_size) {
-            front = (front-1)%max_size;
-            if(front<0){
-                front += max_size;
-            }
+            front = boundary_protector(front-1);
             size++;
             items[front] = item;
         }
@@ -98,7 +102,7 @@ public class ArrayDeque<T>{
             else {
                 T ret = items[front];
                 items[front] = null;
-                front = (front + 1) % max_size;
+                front = boundary_protector(front+1);
                 return ret;
             }
         }
@@ -110,16 +114,17 @@ public class ArrayDeque<T>{
         }
         else {
             size--;
-            T ret = items[last - 1];
-            items[last - 1] = null;
+            T ret = items[boundary_protector(last - 1)];//need protecting
+            items[boundary_protector(last - 1)] = null;
             last--;
             return ret;
         }
     }
     public T get(int index){
-        return items[(front+index)%max_size];
+        index = boundary_protector(front+index);
+        return items[index];
     }
-    public static void main(String[]bla){
+    /*public static void main(String[]bla){
         ArrayDeque ad = new ArrayDeque();
         for(int i=0;i<5;i++){
             ad.addLast(i);
@@ -129,7 +134,7 @@ public class ArrayDeque<T>{
         }
         ad.printDeque();
         for(int i=0;i<10;i++){
-            System.out.println(ad.removeLast());
+            System.out.println(ad.get(i));
         }
-    }
+    }*/
 }
