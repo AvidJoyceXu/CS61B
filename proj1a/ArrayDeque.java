@@ -67,7 +67,8 @@ public class ArrayDeque<T>{
     public void addLast(T item){
         if(size<max_size) {
             size++;
-            items[last++] = item;//ensure last points to no value
+            items[last] = item;//ensure last points to no value
+            last =boundary_protector (last+1);
         }
         else{//resizing
             resize_big();
@@ -81,7 +82,8 @@ public class ArrayDeque<T>{
         return size;
     }
     public void printDeque(){
-        for(int p = front;p!=last;p = (p+1)%max_size){
+        int cnt = 0;
+        for(int p = front;cnt<size;p = (p+1)%max_size,cnt++){
             System.out.print(items[p]+" ");
         }
         System.out.println();
@@ -93,7 +95,7 @@ public class ArrayDeque<T>{
         }
         else {
             size--;
-            if (front <= last) {
+            if (front < last) {
                 T ret = items[front];
                 items[front] = null;
                 front++;
@@ -114,9 +116,10 @@ public class ArrayDeque<T>{
         }
         else {
             size--;
-            T ret = items[boundary_protector(last - 1)];//need protecting
-            items[boundary_protector(last - 1)] = null;
-            last--;
+            last = boundary_protector(last-1);
+            T ret = items[boundary_protector(last)];//need protecting
+            items[boundary_protector(last)] = null;
+
             return ret;
         }
     }
@@ -124,17 +127,16 @@ public class ArrayDeque<T>{
         index = boundary_protector(front+index);
         return items[index];
     }
-    /*public static void main(String[]bla){
+    public static void main(String[]bla){
         ArrayDeque ad = new ArrayDeque();
-        for(int i=0;i<5;i++){
-            ad.addLast(i);
-        }
-        for(int i=5;i<10;i++){
-            ad.addFirst(i);
-        }
-        ad.printDeque();
-        for(int i=0;i<10;i++){
-            System.out.println(ad.get(i));
-        }
-    }*/
+        ad.addLast(0);
+        ad.removeFirst();
+        ad.addFirst(2);
+        ad.addFirst(3);
+        ad.removeFirst();
+        ad.addFirst(5);
+        ad.removeFirst();
+        ad.get(0);
+        ad.removeFirst();
+    }
 }
