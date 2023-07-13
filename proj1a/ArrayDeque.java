@@ -9,13 +9,13 @@ public class ArrayDeque<T>{
     public ArrayDeque(){
         size = 0;
     }
-    public ArrayDeque(ArrayDeque other){
+    /*public ArrayDeque(ArrayDeque other){
         max_size = other.max_size;
         items = (T []) new Object[other.max_size];
         front = other.front;
         last = other.last;
         System.arraycopy(other.items,0,items,0,max_size);
-    }
+    }*/
     private void resize_big(){
         T[] p = (T[]) new Object[max_size*2];
         if(front>=last) {
@@ -124,7 +124,7 @@ public class ArrayDeque<T>{
         }
         else return items[(front+index)%max_size];
     }
-    public static void main(String[] args){
+    /*public static void main(String[] args){
         ArrayDeque test = new ArrayDeque();
         for(int i=0;i<=8;i++){
             test.addLast(i);
@@ -135,6 +135,6 @@ public class ArrayDeque<T>{
         test.removeFirst();
         ArrayDeque copy = new ArrayDeque(test);
 
-    }
+    }*/
 
 }

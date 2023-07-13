@@ -2,7 +2,7 @@ public class LinkedListDeque<T> {
     //private Node sentinel;
     private Node first,last;//keep track of these nodes to ensure constant-time operation
     private int size;
-    public class Node{
+    private class Node{
         public Node prev;
         public T item;
         public Node next;
@@ -16,12 +16,12 @@ public class LinkedListDeque<T> {
         size = 0;
         first = null;last = null;//nothing happens
     }
-    public LinkedListDeque(T item){
+    /*public LinkedListDeque(T item){
         size = 1;
         first = new Node(null,item,null);
         last = first;
-    }
-    public LinkedListDeque(LinkedListDeque other){
+    }*/
+    /*public LinkedListDeque(LinkedListDeque other){
         Node p = other.first;
         int t = other.size();
         while(t>0){
@@ -29,7 +29,7 @@ public class LinkedListDeque<T> {
             p = p.next;
             t--;
         }
-    }
+    }*/
     public void addFirst(T item){
         if(first!=null){
             first.prev = new Node(null,item,first);
