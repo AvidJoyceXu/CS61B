@@ -24,7 +24,7 @@ public class ArrayDeque<T>{
             System.arraycopy(items, 0, p, max_size - front, last);
         }
         else{
-            System.arraycopy(items,0,p,0,max_size);
+            System.arraycopy(items,front,p,0,size);
         }
         max_size *= 2;
         front = 0;
@@ -47,13 +47,13 @@ public class ArrayDeque<T>{
         items = p;
     }
     public void addFirst(T item){
-        if(front<=last){
-            front = max_size - 1;
-        }
-        else{
-            front--;
-        }
         if(size<max_size) {
+            if(front<=last){
+                front = (front-1)%max_size;
+            }
+            else{
+                front--;
+            }
             size++;
             items[front] = item;
         }
@@ -124,17 +124,4 @@ public class ArrayDeque<T>{
         }
         else return items[(front+index)%max_size];
     }
-    /*public static void main(String[] args){
-        ArrayDeque test = new ArrayDeque();
-        for(int i=0;i<=8;i++){
-            test.addLast(i);
-        }
-        for(int i=0;i<5;i++){
-            test.removeFirst();
-        }
-        test.removeFirst();
-        ArrayDeque copy = new ArrayDeque(test);
-
-    }*/
-
 }
