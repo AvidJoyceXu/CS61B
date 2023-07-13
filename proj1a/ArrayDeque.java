@@ -48,11 +48,9 @@ public class ArrayDeque<T>{
     }
     public void addFirst(T item){
         if(size<max_size) {
-            if(front<=last){
-                front = (front-1)%max_size;
-            }
-            else{
-                front--;
+            front = (front-1)%max_size;
+            if(front<0){
+                front += max_size;
             }
             size++;
             items[front] = item;
@@ -85,7 +83,7 @@ public class ArrayDeque<T>{
         System.out.println();
     }
     public T removeFirst(){
-        if(size-1<0.25 * max_size){
+        if(size-1<max_size/4){
             resize_small();
             return removeFirst();
         }
@@ -106,7 +104,7 @@ public class ArrayDeque<T>{
         }
     }
     public T removeLast(){
-        if(size-1<0.25 * max_size){
+        if(size-1< max_size/4){
             resize_small();
             return removeLast();
         }
@@ -119,9 +117,19 @@ public class ArrayDeque<T>{
         }
     }
     public T get(int index){
-        if(front<last){
-            return items[index];
+        return items[(front+index)%max_size];
+    }
+    public static void main(String[]bla){
+        ArrayDeque ad = new ArrayDeque();
+        for(int i=0;i<5;i++){
+            ad.addLast(i);
         }
-        else return items[(front+index)%max_size];
+        for(int i=5;i<10;i++){
+            ad.addFirst(i);
+        }
+        ad.printDeque();
+        for(int i=0;i<10;i++){
+            System.out.println(ad.removeLast());
+        }
     }
 }
