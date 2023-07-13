@@ -89,6 +89,8 @@ public class ArrayDeque<T> {
         System.out.println();
     }
     public T removeFirst() {
+        if (size == 0)
+            return null;
         if (size - 1 < max_size / 4) {
             resize_small();
             return removeFirst();
@@ -110,6 +112,8 @@ public class ArrayDeque<T> {
         }
     }
     public T removeLast() {
+        if (size == 0)
+            return null;
         if (size - 1 < max_size / 4) {
             resize_small();
             return removeLast();
