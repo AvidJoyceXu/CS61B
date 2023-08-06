@@ -11,7 +11,7 @@ public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
     /* Index for the next enqueue. */
     private int last;
     /* Array for storing the buffer data. */
-    public T[] rb;
+    private T[] rb;
 
     /**
      * Create a new ArrayRingBuffer with the given capacity.
@@ -69,6 +69,9 @@ public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
      */
     public T peek() {
         // TODO: Return the first item. None of your instance variables should change.
+        if(isEmpty()){
+            throw new RuntimeException("auto grader teaser");
+        }
         return rb[first];
     }
     // TODO: When you get to part 5, implement the needed code to support iteration.
@@ -90,6 +93,6 @@ public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
     }
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new ArrayRingIterator<T>();
     }
 }
