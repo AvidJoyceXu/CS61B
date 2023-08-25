@@ -28,21 +28,20 @@ public class Percolation {
                 bGrids[i][j] = false;
             }
         }
-        //connect the top site to the N sites in the first line
-        for(int i = 1;i <= N;i++){
-            grids.union(0,i);
-        }
-        //connect the bottom site to the N sites in the last line
-        for(int i = 0;i < N; i++){
+        for(int i = 0;i < N;i++){
+            //connect the top site to the N sites in the first line
+            grids.union(0,xyToInt(0, i));
+            //connect the bottom site to the N sites in the last line
             grids.union( N*N+1, xyToInt(N-1, i));
         }
+
     }
 
     public void open(int row, int col) {      // open the site (row, col) if it is not open already
         if(! inBorder(row, col)){
-            throw new IllegalArgumentException("Illegal (row, col)");
+            throw new IndexOutOfBoundsException("Illegal (row, col)");
         }
-        if(! bGrids[row][col]){
+        if(! bGrids[row][col]){//not opened
             openSitesNum ++ ;
             bGrids[row][col] = true;
             for(int i=0;i<4;i++){
@@ -56,15 +55,16 @@ public class Percolation {
     }
     public boolean isOpen(int row, int col) { // is the site (row, col) open?
         if(! inBorder(row, col)){
-            throw new IllegalArgumentException("Illegal (row, col)");
+            throw new IndexOutOfBoundsException("Illegal (row, col)");
         }
         return bGrids[row][col];
     }
     public boolean isFull(int row, int col) { // is the site (row, col) full?
         if(! inBorder(row, col)){
-            throw new IllegalArgumentException("Illegal (row, col)");
+            throw new IndexOutOfBoundsException("Illegal (row, col)");
         }
-        return grids.connected(0, xyToInt(row, col));
+        //first opened, then connected.
+        return isOpen(row, col) && grids.connected(0, xyToInt(row, col));
     }
     public int numberOfOpenSites() {         // number of open sites
         return openSitesNum;
@@ -72,6 +72,8 @@ public class Percolation {
     public boolean percolates(){// does the system percolate?
         return grids.connected(0, n*n + 1);
     }
-    //public static void main(String[] args)   // use for unit testing (not required)
+    public static void main(String[] args){
+        // do nothing
+    }   // use for unit testing (not required)
 
 }
