@@ -47,7 +47,8 @@ public class Percolation {
             for(int i=0;i<4;i++){
                 int next_x = row + ds[i][0];
                 int next_y = col + ds[i][1];
-                if(bGrids[next_x][next_y]){
+                //be careful to do in-border checking!
+                if(inBorder(next_x,next_y) && bGrids[next_x][next_y]){
                     grids.union(xyToInt(next_x, next_y), xyToInt(row, col));
                 }
             }
@@ -72,8 +73,9 @@ public class Percolation {
     public boolean percolates(){// does the system percolate?
         return grids.connected(0, n*n + 1);
     }
+    // use for unit testing (not required)
     public static void main(String[] args){
-        // do nothing
-    }   // use for unit testing (not required)
+
+    }
 
 }
