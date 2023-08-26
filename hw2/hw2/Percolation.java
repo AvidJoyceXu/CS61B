@@ -71,6 +71,9 @@ public class Percolation {
         return openSitesNum;
     }
     public boolean percolates(){// does the system percolate?
+        //corner case special check
+        if(n==1)
+            return bGrids[0][0];
         return grids.connected(0, n*n + 1);
     }
     // use for unit testing (not required)
