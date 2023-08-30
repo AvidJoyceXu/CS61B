@@ -1,5 +1,6 @@
 package lab9;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -93,8 +94,12 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     /* Returns a Set view of the keys contained in this map. */
     @Override
-    public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+    public Set<K> keySet(){
+        Set<K> ret = new HashSet();
+        for(K key: this){ // the enhanced for loop employs the iterator method
+            ret.add(key);
+        }
+        return ret;
     }
 
     /* Removes the mapping for the specified key from this map if exists.
@@ -102,7 +107,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * UnsupportedOperationException. */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        int bktNum = hash(key);
+        size--;
+        return buckets[bktNum].remove(key);
     }
 
     /* Removes the entry for the specified key only if it is currently mapped to
@@ -110,11 +117,39 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * throw an UnsupportedOperationException.*/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        int bktNum = hash(key);
+        if(buckets[bktNum].get(key) == value){
+            size--;
+            return buckets[bktNum].remove(key, value);
+        }
+        return null;
     }
+    private class MyHashMapIter implements Iterator<K> {
+        private int bktNum = 0;
+        private Iterator<K> ArrayMapIter;
+        private int count = 0;
+        @Override
+        public boolean hasNext() {
+            return count < size;
+        }
 
+        @Override
+        public K next() {
+            if (!hasNext()){
+                return null;
+            }
+            if(ArrayMapIter == null){
+                ArrayMapIter = buckets[bktNum].iterator();
+            }
+            if(hasNext() && !ArrayMapIter.hasNext()){
+                ArrayMapIter = buckets[++bktNum].iterator();
+            }
+            count ++;
+            return ArrayMapIter.next();
+        }
+    }
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return new MyHashMapIter();
     }
 }
