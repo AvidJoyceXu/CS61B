@@ -96,8 +96,12 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     @Override
     public Set<K> keySet(){
         Set<K> ret = new HashSet();
-        for(K key: this){ // the enhanced for loop employs the iterator method
+        /*for(K key: this){ // the enhanced for loop employs the iterator method
             ret.add(key);
+        }*/
+        Iterator<K> iter = iterator();
+        while(iter.hasNext()){
+            ret.add(iter.next());
         }
         return ret;
     }
@@ -134,14 +138,15 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         }
 
         @Override
-        public K next() {
+        public K next() {//iterates through all the buckets
             if (!hasNext()){
                 return null;
             }
-            if(ArrayMapIter == null){
+            if(ArrayMapIter == null){//initialization
                 ArrayMapIter = buckets[bktNum].iterator();
             }
-            if(hasNext() && !ArrayMapIter.hasNext()){
+            //continue searching until find an available iterator
+            while(!ArrayMapIter.hasNext()){ //# this process may be repeated more than once!
                 ArrayMapIter = buckets[++bktNum].iterator();
             }
             count ++;

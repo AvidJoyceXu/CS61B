@@ -1,5 +1,6 @@
 package lab9;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -126,19 +127,99 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
 
-    /* Returns a Set view of the keys contained in this map. */
+
+    private Set<K> keyset;
+    private void keySetHelper(Node nd){
+        if(nd != null){
+            keyset.add(nd.key);
+            keySetHelper(nd.left);
+            keySetHelper(nd.right);
+        }
+    }
     @Override
+    /* Returns a Set view of the keys contained in this map. */
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        keyset = new HashSet<>();
+        keySetHelper(root);
+        return keyset;
     }
 
     /** Removes KEY from the tree if present
      *  returns VALUE removed,
      *  null on failed removal.
      */
+    private boolean hasOneChild(Node nd){
+        return !nd.isLeaf() && (nd.left == null || nd.right == null);
+    }
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        Node here = root;
+        Node parent = null;
+        String dir = "Default";
+        while(here!=null){
+            if(here.key.compareTo(key) == 0){
+                break;
+            }
+            else if (here.key.compareTo(key) > 0){
+                parent = here;
+                dir = "Left";
+                here = here.left;
+            }
+            else{
+                parent = here;
+                dir = "Right";
+                here = here.right;
+            }
+        }
+        if(here == null){//failed removal in that the specific key is nowhere to be found
+            return null;
+        }
+        V ret = here.value;
+        if(here.isLeaf()){
+            switch(dir){
+                case "Left":parent.left = null;break;
+                case "Right":parent.right = null;break;
+                default:root = null;break;
+            }
+        }
+        else if (hasOneChild(here)){
+            if(parent!=null && dir == "Left"){
+                if(here.right != null){
+                    parent.left = here.right;
+                }
+                else{parent.left = here.left;}
+            }
+            else if (parent!=null && dir == "Right"){
+                if(here.right != null){
+                    parent.right = here.right;
+                }
+                else{parent.right = here.left;}
+            }
+            else if (parent == null){
+                if(here.right != null){
+                    root = here.right;
+                }
+                else root = here.left;
+            }
+        }
+        else{//has two child
+            //find out the right-most node in the left subtree
+            Node rightMost;
+            Node here_2 = here.left;
+            while(!here_2.right.isLeaf()){
+                here_2 = here_2.right;
+            }
+            rightMost = here_2.right;
+            here_2.right = null;
+            rightMost.left = here.left;
+            rightMost.right = here.right;
+            switch(dir){
+                case "Left": parent.left = rightMost;
+                case "Right": parent.right = rightMost;
+                default: root = rightMost;
+            }
+        }
+        return ret;
     }
 
     /** Removes the key-value entry for the specified key only if it is
@@ -147,11 +228,14 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      **/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        if(get(key) == value){
+            return remove(key);
+        }
+        return null;
     }
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return keySet().iterator();
     }
 }
