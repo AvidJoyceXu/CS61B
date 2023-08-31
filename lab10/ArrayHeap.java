@@ -109,7 +109,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 
         /** TODO: Your code here. */
         int parent = parentIndex(index);
-        if(parent != 0 && min(parent,index) != parent){ // stop at proper moments
+        if(inBounds(parent) && min(parent,index) != parent){ // stop at proper moments
             swap(parent,index);
             swim(parent);
             // swap only change the way nodes are stored in the contents, not the value of parent and index
@@ -127,6 +127,9 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         int left = leftIndex(index);
         int right = rightIndex(index);
         int min_child = min(left, right);
+        if(!inBounds(left)){//first left child, then right child. ** According to the rule of completeness
+            min_child = index;
+        }
         if(min(min_child, index) != index){
             swap(min_child, index);
             sink(min_child);
@@ -177,7 +180,8 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         T ret = contents[1].item();
         swap(1, size);
         size--;
-        sink(1);
+        if (inBounds(1))
+            sink(1);
         return ret;
     }
 
