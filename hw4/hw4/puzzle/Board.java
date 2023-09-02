@@ -5,6 +5,7 @@ import edu.princeton.cs.algs4.Queue;
 public class Board implements WorldState{
     /* Constructs a board from an N-by-N array of tiles where
        tiles[i][j] = tile at row i, column j*/
+    private int[][] manhattanXY;
     private int[][] tiles;
     private final int N;
     private int[][] ds = {{0,1},{0,-1},{1,0},{-1,0}};
@@ -15,6 +16,16 @@ public class Board implements WorldState{
         for(int i=0;i<N;i++){
             for(int j=0;j<N;j++){
                 this.tiles[i][j] = tiles[i][j];//deep copy manually
+            }
+        }
+        manhattanXY = new int[N*N][2];
+        int x=0,y=0;
+        for(int i=1;i<N*N;i++){
+            manhattanXY[i][0]=x;
+            manhattanXY[i][1]=y;
+            y++;
+            if(y==N){
+                y=0;x++;
             }
         }
     }
@@ -35,7 +46,7 @@ public class Board implements WorldState{
     @Override
     //Returns the neighbors of the current board
     public Iterable<WorldState> neighbors(){
-        /*int x = -1,y = -1;
+        int x = -1,y = -1;
         for(int i=0;i<N;i++){
             for(int j=0;j<N;j++){
                 if(tiles[i][j] == 0){
@@ -57,38 +68,7 @@ public class Board implements WorldState{
                 tiles[nx][ny] = med;
             }
         }
-        return ret;*/
-        Queue<WorldState> neighbors = new Queue<>();
-        int hug = size();
-        int bug = -1;
-        int zug = -1;
-        for (int rug = 0; rug < hug; rug++) {
-            for (int tug = 0; tug < hug; tug++) {
-                if (tileAt(rug, tug) == 0) {
-                    bug = rug;
-                    zug = tug;
-                }
-            }
-        }
-        int[][] ili1li1 = new int[hug][hug];
-        for (int pug = 0; pug < hug; pug++) {
-            for (int yug = 0; yug < hug; yug++) {
-                ili1li1[pug][yug] = tileAt(pug, yug);
-            }
-        }
-        for (int l11il = 0; l11il < hug; l11il++) {
-            for (int lil1il1 = 0; lil1il1 < hug; lil1il1++) {
-                if (Math.abs(-bug + l11il) + Math.abs(lil1il1 -     zug) - 1 == 0) {
-                    ili1li1[bug][zug] = ili1li1[l11il][lil1il1];
-                    ili1li1[l11il][lil1il1] = 0;
-                    Board neighbor = new Board(ili1li1);
-                    neighbors.enqueue(neighbor);
-                    ili1li1[l11il][lil1il1] = ili1li1[bug][zug];
-                    ili1li1[bug][zug] = 0;
-                }
-            }
-        }
-        return neighbors;
+        return ret;
     }
     //Hamming estimate described below
     public int hamming(){
@@ -108,12 +88,8 @@ public class Board implements WorldState{
             for(int j=0;j<N;j++){
                 if(tiles[i][j]==0)
                     continue;
-                int nx = tiles[i][j]/N;
-                int ny = tiles[i][j]%N - 1;
-                if(ny<0){
-                    ny = N-1;
-                    i = tiles[i][j]/N - 1;
-                }
+                int nx = manhattanXY[tiles[i][j]][0];
+                int ny = manhattanXY[tiles[i][j]][1];
                 ret += java.lang.Math.abs(nx-i)+java.lang.Math.abs(ny-j);
             }
         }
@@ -123,6 +99,8 @@ public class Board implements WorldState{
       position as y's*/
     public boolean equals(Object y){
         Board z = (Board) y;
+        if(N != z.tiles.length)//basically, checks for length equality
+            return false;
         for(int i=0;i<N;i++){
             for(int j=0;j<N;j++){
                 if(tiles[i][j]!=z.tiles[i][j])
@@ -152,7 +130,7 @@ public class Board implements WorldState{
       simply return the results of manhattan() when submitted to
       Gradescope.*/
     public int estimatedDistanceToGoal() {
-        return hamming();
+        return manhattan();
     }
 
 }
