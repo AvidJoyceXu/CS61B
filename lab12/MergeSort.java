@@ -92,6 +92,8 @@ public class MergeSort {
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
         // Your code here!
+        if(items.isEmpty())
+            return items;
         Queue<Queue<Item> > split = makeSingleItemQueues(items);
         while(split.size() > 1){
             Queue<Queue<Item> > newSplit = new Queue<>();
@@ -107,7 +109,7 @@ public class MergeSort {
             }
             split = newSplit;
         }
-        return split.dequeue();
+        return split.dequeue(); // dequeue from a zero-sized queue will cause stack underflow
     }
     public static void main(String[] bur){
         Queue<String> students = new Queue<String>();
