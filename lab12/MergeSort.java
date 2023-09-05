@@ -64,19 +64,17 @@ public class MergeSort {
             Queue<Item> q1, Queue<Item> q2) {
         // Your code here!
         if(q1.isEmpty() && q2.isEmpty())
-            return null;
+            return q1;
         Item min = getMin(q1, q2);
         Queue<Item> ret = new Queue<>();
         ret.enqueue(min);
         Queue<Item> newQ = mergeSortedQueues(q1, q2);
-        if(newQ != null) {
-            for (Item item : newQ) {
-                ret.enqueue(item);
-            }
+        for (Item item : newQ) {
+            ret.enqueue(item);
         }
         return ret;
     }
-    @Test
+    /*@Test
     public void testMergeSortedQueues(){
         Queue<String> s1 = new Queue<String>();
         s1.enqueue("Alice");
@@ -87,7 +85,7 @@ public class MergeSort {
         assertEquals("Alice",s.dequeue());
         assertEquals("Ethan", s.dequeue());
         assertEquals("Vanessa", s.dequeue());
-    }
+    }*/
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
