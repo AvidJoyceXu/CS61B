@@ -79,19 +79,19 @@ public class CountingSort {
             return naiveCountingSort(arr);
         }
         int[] counts_pos = new int[max + 1];
-        int[] counts_neg = new int[-min + 1];
+        int[] counts_neg = new int[-min];
         for (int i : arr) {
             if(i>=0){
                 counts_pos[i]++;
             }
             else{
-                counts_neg[-i]++;
+                counts_neg[-i-1]++;
             }
         }
         int[] starts_pos = new int[max + 1];
-        int[] starts_neg = new int[-min+ 1];
+        int[] starts_neg = new int[-min];
         int pos = 0;
-        for (int i = -min; i > 0; i--){
+        for (int i = -min-1; i >= 0; i--){
             starts_neg[i] = pos;
             pos += counts_neg[i];
         }
@@ -107,7 +107,7 @@ public class CountingSort {
                 place = starts_pos[item]++;
             }
             else{
-                place = starts_neg[-item]++;
+                place = starts_neg[-item-1]++;
             }
             sorted2[place] = item;
         }
