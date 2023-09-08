@@ -57,14 +57,7 @@ public class CountingSort {
         return sorted;
     }
     private static int getPos(int neg, int curMax){
-        if(neg<0)
-            return curMax - neg;
-        return neg;
-    }
-    private static int getInt(int Pos, int curMax){
-        if(Pos > curMax)
-            return curMax - Pos;
-        return Pos;
+        return Math.abs(neg);
     }
     /**
      * Counting sort on the given int array, must work even with negative numbers.
@@ -85,27 +78,38 @@ public class CountingSort {
         if(min >= 0){
             return naiveCountingSort(arr);
         }
-        int[] counts = new int[max - min + 1];
+        int[] counts_pos = new int[max + 1];
+        int[] counts_neg = new int[-min + 1];
         for (int i : arr) {
-            counts[getPos(i, max)]++;
+            if(i>=0){
+                counts_pos[i]++;
+            }
+            else{
+                counts_neg[-i]++;
+            }
         }
-        int[] starts = new int[max - min + 1];
+        int[] starts_pos = new int[max + 1];
+        int[] starts_neg = new int[-min+ 1];
         int pos = 0;
-        for (int i = max - min; i > max; i--){
-            starts[i] = pos;
-            pos += counts[i];
+        for (int i = -min; i > 0; i--){
+            starts_neg[i] = pos;
+            pos += counts_neg[i];
         }
         for (int i = 0; i <= max; i += 1) {
-            starts[i] = pos;
-            pos += counts[i];
+            starts_pos[i] = pos;
+            pos += counts_pos[i];
         }
 
         int[] sorted2 = new int[arr.length];
-        for (int i = 0; i < arr.length; i += 1) {
-            int item = arr[i];
-            int place = starts[getPos(item, max)];
+        for (int item: arr) {
+            int place;
+            if(item >=0 ){
+                place = starts_pos[item]++;
+            }
+            else{
+                place = starts_neg[-item]++;
+            }
             sorted2[place] = item;
-            starts[getPos(item, max)] += 1;
         }
         return sorted2;
     }

@@ -26,7 +26,7 @@ public class RadixSort {
             max = Math.max(max, str.length());
             sorted[i++] = str;
         }
-        for(int d = 0; d <= max; d++){
+        for(int d = max; d >= 0; d++){//watch out! string index actually grow from left to right!
             sortHelperLSD(sorted, d);
         }
         return sorted;
